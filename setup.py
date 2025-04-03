@@ -4,8 +4,8 @@ setup(
     name="spamfilter",
     version="0.1.0",
     description="Spam classification library with TF-IDF and Transformer support",
-    author="Your Name",
-    author_email="your@email.com",
+    author="tizhproger",
+    author_email="tizhproger.development@gmail.com",
     url="https://github.com/yourusername/spamfilter",
     packages=find_packages(),
     install_requires=[
