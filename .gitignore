@@ -4,5 +4,6 @@ __pycache__/
 *.bin
 *.log
 *.csv
+datasets/
 models/
 checkpoints/
