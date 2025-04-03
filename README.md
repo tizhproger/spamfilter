@@ -13,7 +13,7 @@
 ## 🔧 Установка
 
 ```bash
-git clone https://github.com/yourusername/spamfilter.git
+git clone https://github.com/tizhproger/spamfilter.git
 cd spamfilter
 pip install .
 ```
