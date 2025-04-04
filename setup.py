@@ -6,7 +6,7 @@ setup(
     description="Spam classification library with TF-IDF and Transformer support",
     author="tizhproger",
     author_email="tizhproger.development@gmail.com",
-    url="https://github.com/yourusername/spamfilter",
+    url="https://github.com/tizhproger/spamfilter",
     packages=find_packages(),
     install_requires=[
         "scikit-learn",
