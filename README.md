@@ -1,16 +1,17 @@
-**Spamfilter** — это простая и расширяемая Python-библиотека для обнаружения спама с поддержкой TF-IDF и трансформеров (BERT, DistilBERT, DeBERTa и др.).
+**Spamfilter** — is a simple and extensible Python library for spam detection with support for TF-IDF and transformers (BERT, DistilBERT, DeBERTa, etc.).
 
-## 🚀 Возможности
+## Functionality
 
-- Классификация текста на `spam` и `ham`
-- Поддержка нескольких моделей:
-  - TF-IDF + Logistic Regression
-  - Любая HuggingFace-модель (DeBERTa, BERT, RoBERTa, RuBERT и др.)
-- Обучение на пользовательских данных
-- Предсказание, вероятности, оценка, сохранение/загрузка
-- Автоматическая работа с CUDA (если доступна)
+- Text classification into `spam` and `ham`
+- Support for several models: TF-IDF + Logistic Regression, BERT based models, any HugginFace model. (Included pretrained models: TF-IDF + Logistic Regression, DeBERTa v3 small, DistilliBERT, RuBERT)
+- Training, evaluating and benchmarking of models out of the box
+- Support of pretrained models and training on user data
+- Prediction, probabilities, evaluation, saving/loading
+- Supports CUDA (if available) for processing
 
-## 🔧 Установка
+All datasets used for training the prepaired models, are listed in folder "datasets". In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
+
+## Installation
 
 ```bash
 git clone https://github.com/tizhproger/spamfilter.git
@@ -18,16 +19,28 @@ cd spamfilter
 pip install .
 ```
 
+## Data
+temp text
 
-# Spam Detection Models Evaluation Report
+## Models Evaluation Report
 
 ## Goal
 
-Evaluate the behavior of spam detection models after excluding email messages to test the impact of potential noise.
+Evaluate the behavior of classification models on different datasets, in task of spam detection. Test impact of standalone and combined datasets, e.g. after excluding data to test the impact of potential noise and overfitting.
 
 ---
 
 ## Datasets
+
+Initial set of datasets consists of:
+- SMS spam dataset. Available on: LINK
+
+Example of content:
+PIC
+
+Classes distribution:
+PIC
+
 
 - **Combined**: Email + SMS + Twitter
 - **Filtered**: SMS + Twitter only
