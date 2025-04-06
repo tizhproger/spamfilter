@@ -162,8 +162,13 @@ class BertLikeDetector:
         dataset = dataset.train_test_split(test_size=0.2)
 
         def tokenize(example):
-            return self.tokenizer(example["text"], truncation=True, padding="max_length", max_length=128)
-        tokenized = dataset.map(tokenize)
+            return self.tokenizer(
+                example["text"],
+                truncation=True,
+                padding="max_length",
+                max_length=512)
+        
+        tokenized = dataset.map(tokenize, batched=True)
 
         args = TrainingArguments(
             output_dir=output_dir,
@@ -185,7 +190,6 @@ class BertLikeDetector:
         )
 
         trainer.train()
-        self.pipeline = TextClassificationPipeline(model=self.model, tokenizer=self.tokenizer, device=0 if torch.cuda.is_available() else -1)
         self.is_trained = True
 
     def predict(self, texts):
@@ -193,13 +197,28 @@ class BertLikeDetector:
             raise ValueError("Model is not trained or loaded.")
 
         if self.pipeline is None:
-            self.pipeline = TextClassificationPipeline(model=self.model, tokenizer=self.tokenizer, device=0 if torch.cuda.is_available() else -1)
+            self.pipeline = TextClassificationPipeline(
+                model=self.model,
+                tokenizer=self.tokenizer,
+                truncation=True,
+                padding=True,
+                max_length=512,
+                device=0 if torch.cuda.is_available() else -1)
+            
         outputs = self.pipeline(texts)
         return [int(o["label"].split("_")[-1]) for o in outputs]
 
     def predict_proba(self, texts):
         if self.pipeline is None:
-            self.pipeline = TextClassificationPipeline(model=self.model, tokenizer=self.tokenizer, device=0 if torch.cuda.is_available() else -1, return_all_scores=True)
+            self.pipeline = TextClassificationPipeline(
+                model=self.model,
+                tokenizer=self.tokenizer,
+                truncation=True,
+                padding=True,
+                max_length=512,
+                device=0 if torch.cuda.is_available() else -1,
+                return_all_scores=True)
+            
         results = self.pipeline(texts, return_all_scores=True)
         return [[score['score'] for score in output] for output in results]
 
@@ -225,5 +244,12 @@ class BertLikeDetector:
         full_path = os.path.join(path, self.model_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(full_path)
         self.tokenizer = AutoTokenizer.from_pretrained(full_path)
-        self.pipeline = TextClassificationPipeline(model=self.model, tokenizer=self.tokenizer, device=0 if torch.cuda.is_available() else -1)
+        self.pipeline = TextClassificationPipeline(
+            model=self.model,
+            tokenizer=self.tokenizer,
+            truncation=True,
+            padding=True,
+            max_length=512,
+            device=0 if torch.cuda.is_available() else -1)
+        
         self.is_trained = True
