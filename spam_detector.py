@@ -96,7 +96,7 @@ class TFIDFDetector:
         self.model = LogisticRegression(class_weight='balanced', max_iter=1000)
         self.is_fitted = False
 
-    def train(self, texts: list, labels: list) -> None:
+    def train(self, texts: list, labels: list, **kwargs) -> None:
         """
         Обучает векторизатор и модель на новых данных.
         """
