@@ -33,17 +33,65 @@ Evaluate the behavior of classification models on different datasets, in task of
 ## Datasets
 
 Initial set of datasets consists of:
-- SMS spam dataset. Available on: LINK
+- **SMS** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset).
 
 Example of content:
-PIC
+![Dataset Content](metrics_comparison.png)
 
 Classes distribution:
-PIC
+![Distribution](metrics_comparison.png)
 
+<br/>
 
-- **Combined**: Email + SMS + Twitter
-- **Filtered**: SMS + Twitter only
+- **Twitter** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/greyhatboy/twitter-spam-dataset)
+
+Example of content:
+![Dataset Content](metrics_comparison.png)
+
+Classes distribution:
+![Distribution](metrics_comparison.png)
+
+<br/>
+
+- **Email** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/jackksoncsie/spam-email-dataset)
+
+Example of content:
+![Dataset Content](metrics_comparison.png)
+
+Classes distribution:
+![Distribution](metrics_comparison.png)
+
+<br/>
+
+- **Combined** dataset. (Joined together Email + Twitter + SMS spam datasets)
+
+Example of content:
+![Dataset Content](metrics_comparison.png)
+
+Classes distribution:
+![Distribution](metrics_comparison.png)
+
+<br/>
+
+- **Combined NoEmail** dataset. (Joined together Twitter + SMS spam datasets)
+
+Example of content:
+![Dataset Content](metrics_comparison.png)
+
+Classes distribution:
+![Distribution](metrics_comparison.png)
+
+<br/>
+
+- **Telegram** dataset. (Manually collected spam + normal messages on ru language)
+
+Example of content:
+![Dataset Content](metrics_comparison.png)
+
+Classes distribution:
+![Distribution](metrics_comparison.png)
+
+<br/>
 
 ---
 
