@@ -42,7 +42,7 @@ class Detector:
         save_as — имя папки для сохранения (например, 'my_rubert')
         """
         path = os.path.join("models", save_as or model_name.replace("/", "_"))
-        return cls(model=model_name, model_dir=path)
+        return cls(model=model_name, model_dir=path, load_if_exists=False)
     
     @staticmethod
     def list_models():
