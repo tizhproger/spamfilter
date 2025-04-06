@@ -30,6 +30,9 @@ Evaluate the behavior of classification models on different datasets, in task of
 
 ---
 
+<details>
+  <summary>Data description</summary>
+  
 ## Datasets
 
 Initial set of datasets consists of:
@@ -87,8 +90,9 @@ Example of content:
 
 <br/>
 
----
+</details>
 
+---
 ## Results
 
 ### TF-IDF + Logistic Regression
