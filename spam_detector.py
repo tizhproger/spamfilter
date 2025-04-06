@@ -166,7 +166,7 @@ class BertLikeDetector:
                 example["text"],
                 truncation=True,
                 padding="max_length",
-                max_length=512)
+                max_length=self.tokenizer.model_max_length)
         
         tokenized = dataset.map(tokenize, batched=True)
 
@@ -202,7 +202,7 @@ class BertLikeDetector:
                 tokenizer=self.tokenizer,
                 truncation=True,
                 padding=True,
-                max_length=512,
+                max_length=self.tokenizer.model_max_length,
                 device=0 if torch.cuda.is_available() else -1)
             
         outputs = self.pipeline(texts)
@@ -215,7 +215,7 @@ class BertLikeDetector:
                 tokenizer=self.tokenizer,
                 truncation=True,
                 padding=True,
-                max_length=512,
+                max_length=self.tokenizer.model_max_length,
                 device=0 if torch.cuda.is_available() else -1,
                 return_all_scores=True)
             
@@ -249,7 +249,7 @@ class BertLikeDetector:
             tokenizer=self.tokenizer,
             truncation=True,
             padding=True,
-            max_length=512,
+            max_length=self.tokenizer.model_max_length,
             device=0 if torch.cuda.is_available() else -1)
         
         self.is_trained = True
