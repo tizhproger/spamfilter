@@ -19,22 +19,11 @@ cd spamfilter
 pip install .
 ```
 
-## Data
-temp text
-
-## Models Evaluation Report
-
-## Goal
-
-Evaluate the behavior of classification models on different datasets, in task of spam detection. Test impact of standalone and combined datasets, e.g. after excluding data to test the impact of potential noise and overfitting.
-
----
-
-<details>
-  <summary>Data description</summary>
-  
 ## Datasets
 
+<details>
+  <summary>Data description</summary
+  
 Initial set of datasets consists of:
 - **SMS** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset).
 
@@ -91,6 +80,12 @@ Example of content:
 <br/>
 
 </details>
+
+## Models Evaluation Report
+
+## Goal
+
+Evaluate the behavior of classification models on different datasets, in task of spam detection. Test impact of standalone and combined datasets, e.g. after excluding data to test the impact of potential noise and overfitting.
 
 ---
 ## Results
