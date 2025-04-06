@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "scikit-learn",
-        "transformers",
+        "transformers>=4.37.0",
         "datasets",
         "torch",
         "joblib",
