@@ -15,7 +15,9 @@ setup(
         "torch",
         "joblib",
         "tqdm",
-        "nltk"
+        "nltk",
+        "tiktoken",
+        "sentencepiece"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
