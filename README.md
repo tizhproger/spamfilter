@@ -36,60 +36,54 @@ Initial set of datasets consists of:
 - **SMS** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset).
 
 Example of content:
-![Dataset Content](metrics_comparison.png)
+![Dataset Content](images/sms_dataset_content.png)
 
-Classes distribution:
-![Distribution](metrics_comparison.png)
+![Distribution](images/sms_ds_distr.png)
 
 <br/>
 
 - **Twitter** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/greyhatboy/twitter-spam-dataset)
 
 Example of content:
-![Dataset Content](metrics_comparison.png)
+![Dataset Content](images/twitter_ds_content.png)
 
-Classes distribution:
-![Distribution](metrics_comparison.png)
+![Distribution](images/twitter_ds_distr.png)
 
 <br/>
 
 - **Email** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/jackksoncsie/spam-email-dataset)
 
 Example of content:
-![Dataset Content](metrics_comparison.png)
+![Dataset Content](images/email_ds_content.png)
 
-Classes distribution:
-![Distribution](metrics_comparison.png)
+![Distribution](images/email_ds_distr.png)
 
 <br/>
 
 - **Combined** dataset. (Joined together Email + Twitter + SMS spam datasets)
 
 Example of content:
-![Dataset Content](metrics_comparison.png)
+![Dataset Content](images/combined_ds_content.png)
 
-Classes distribution:
-![Distribution](metrics_comparison.png)
+![Distribution](images/combined_ds_distr.png)
 
 <br/>
 
 - **Combined NoEmail** dataset. (Joined together Twitter + SMS spam datasets)
 
 Example of content:
-![Dataset Content](metrics_comparison.png)
+![Dataset Content](images/noemail_ds_content.png)
 
-Classes distribution:
-![Distribution](metrics_comparison.png)
+![Distribution](images/noemail_ds_distr.png)
 
 <br/>
 
 - **Telegram** dataset. (Manually collected spam + normal messages on ru language)
 
 Example of content:
-![Dataset Content](metrics_comparison.png)
+![Dataset Content](images/telegram_ds_content.png)
 
-Classes distribution:
-![Distribution](metrics_comparison.png)
+![Distribution](images/telegram_ds_distr.png)
 
 <br/>
 
