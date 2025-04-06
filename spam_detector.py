@@ -4,7 +4,7 @@ import torch
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, DataCollatorWithPadding
 from transformers import TextClassificationPipeline
 from datasets import Dataset
 
@@ -156,6 +156,7 @@ class BertLikeDetector:
         self.model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
         self.pipeline = None
         self.is_trained = False
+        self.batch_size = 16 if torch.cuda.is_available() else 4
 
     def train(self, texts, labels, output_dir="bert_model", epochs=3, batch_size=8):
         dataset = Dataset.from_dict({"text": texts, "label": labels})
@@ -172,9 +173,9 @@ class BertLikeDetector:
 
         args = TrainingArguments(
             output_dir=output_dir,
-            evaluation_strategy="epoch",
-            per_device_train_batch_size=batch_size,
-            per_device_eval_batch_size=batch_size,
+            eval_strategy="epoch",
+            per_device_train_batch_size=batch_size if batch_size else self.batch_size,
+            per_device_eval_batch_size=batch_size if batch_size else self.batch_size,
             num_train_epochs=epochs,
             logging_dir=f"{output_dir}/logs",
             save_strategy="no",
@@ -186,7 +187,7 @@ class BertLikeDetector:
             args=args,
             train_dataset=tokenized["train"],
             eval_dataset=tokenized["test"],
-            tokenizer=self.tokenizer
+            data_collator=DataCollatorWithPadding(tokenizer=self.tokenizer)
         )
 
         trainer.train()
@@ -203,9 +204,10 @@ class BertLikeDetector:
                 truncation=True,
                 padding=True,
                 max_length=self.tokenizer.model_max_length,
-                device=0 if torch.cuda.is_available() else -1)
-            
-        outputs = self.pipeline(texts)
+                device=0 if torch.cuda.is_available() else -1,
+                batch_size=self.batch_size)
+        
+        outputs = self.pipeline(texts, batch_size=self.batch_size)
         return [int(o["label"].split("_")[-1]) for o in outputs]
 
     def predict_proba(self, texts):
@@ -217,9 +219,10 @@ class BertLikeDetector:
                 padding=True,
                 max_length=self.tokenizer.model_max_length,
                 device=0 if torch.cuda.is_available() else -1,
+                batch_size=self.batch_size,
                 return_all_scores=True)
             
-        results = self.pipeline(texts, return_all_scores=True)
+        results = self.pipeline(texts, batch_size=self.batch_size, return_all_scores=True)
         return [[score['score'] for score in output] for output in results]
 
     def evaluate(self, texts, labels):
@@ -250,6 +253,7 @@ class BertLikeDetector:
             truncation=True,
             padding=True,
             max_length=self.tokenizer.model_max_length,
-            device=0 if torch.cuda.is_available() else -1)
+            device=0 if torch.cuda.is_available() else -1,
+            batch_size=self.batch_size)
         
         self.is_trained = True
