@@ -3,7 +3,7 @@
 ## Functionality
 
 - Text classification into `spam` and `ham`
-- Support for several models: TF-IDF + Logistic Regression, BERT based models, any HugginFace model. (Included pretrained models: TF-IDF + Logistic Regression, DeBERTa v3 small, DistilliBERT, RuBERT)
+- Support for several models: TF-IDF + Logistic Regression, BERT based models, any HugginFace model. (Included pretrained models: TF-IDF + Logistic Regression, DeBERTa v3 small, DistilBERT, RuBERT)
 - Training, evaluating and benchmarking of models out of the box
 - Support of pretrained models and training on user data
 - Prediction, probabilities, evaluation, saving/loading
@@ -113,13 +113,6 @@ df_email.head()
 </details>
 
 ## Models Evaluation Report
-
-## Goal
-
-Evaluate the behavior of classification models on different datasets, in task of spam detection. Test impact of standalone and combined datasets, e.g. after excluding data to test the impact of potential noise and overfitting.
-
----
-## Results
 
 ### TF-IDF + Logistic Regression
 
