@@ -9,23 +9,26 @@ from transformers import TextClassificationPipeline
 from datasets import Dataset
 
 class Detector:
-    def __init__(self, model="tfidf", model_dir=None):
+    def __init__(self, model="tfidf", model_dir=None, load_if_exists=True):
         self.model_name = model.lower()
         self.model_dir = model_dir or os.path.join("models", self.model_name)
 
-        if not os.path.isdir(self.model_dir):
-            raise FileNotFoundError(f"Model directory '{model_dir}' not found")
+        model_exists = os.path.isdir(self.model_dir)
 
         if self.model_name == "tfidf":
             self.detector = TFIDFDetector()
-            self.detector.load(self.model_dir)
+            if model_exists and load_if_exists:
+                self.detector.load(self.model_dir)
 
-        elif os.path.isdir(self.model_dir) and Detector.is_valid_hf_model(self.model_dir):
+        elif model_exists and Detector.is_valid_hf_model(self.model_dir) and load_if_exists:
             self.detector = BertLikeDetector(model_name=model_dir)
             self.detector.load(self.model_dir)
+        
+        elif not load_if_exists:
+            self.detector = BertLikeDetector(model_name=self.model_name)
 
         else:
-            raise ValueError("Unknown model type. Use 'tfidf', 'deberta' or 'distilbert'")
+            raise FileNotFoundError(f"Model directory '{self.model_dir}' not found or is invalid")
     
     @staticmethod
     def is_valid_hf_model(path: str) -> bool:
