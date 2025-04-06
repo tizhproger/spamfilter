@@ -81,6 +81,37 @@ Example of content:
 
 </details>
 
+<details>
+<summary>Data preparation</summary>
+
+But it is not that easy :)
+Email dataset is a little bit harder to use, as the other ones. The reason for that is an apsence of formatting. At all.
+Message text can contain Subject:, To:, Date: and other fields, which is a big noise for simple classification and even BERTa like models too.
+To fix it, I used a simple cleaning code to remove all unnecessary text pieces. (It costed a text sence in some messages, but it is better than nothing)
+
+Here is the code I used to cleanup Email dataset:
+```python
+import pandas as pd
+import re
+
+df_email = pd.read_csv("drive/MyDrive/ml_data/emails_dataset.csv", encoding="latin-1")
+
+def clean_email_text(text: str) -> str:
+    text = re.sub(r'^(Subject|From|To|Date)\s*:\s*', '', text) # Removing frequent texts
+    text = re.sub(r'<[^>]+>', '', text) # Remove HTML tags too
+    text = re.sub(r'[^a-z0-9\s\.\,\!\?\:\-]', ' ', text) # Remove any unnecessary symbol
+    text = re.sub(r'\s+', ' ', text) # Merge multiple spaces into one
+    text = text.strip()
+    return text
+
+df_email = df_email[['spam', 'text']]
+df_email.columns = ['label', 'message']
+df_email['message'] = df_email['message'].apply(clean_email_text)
+df_email.head()
+```
+
+</details>
+
 ## Models Evaluation Report
 
 ## Goal
