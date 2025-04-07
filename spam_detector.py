@@ -1,12 +1,16 @@
 import joblib
 import os
 import torch
+import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, DataCollatorWithPadding
 from transformers import TextClassificationPipeline
 from datasets import Dataset
+from utils import free_gpu, diagnostic_report
+
+torch.cuda.empty_cache()
 
 class Detector:
     def __init__(self, model="tfidf", model_dir=None, load_if_exists=True):
@@ -60,6 +64,8 @@ class Detector:
         return name == "tfidf" or Detector.is_valid_hf_model(os.path.join("models", name))
 
     def train(self, texts, labels, output_dir="model_output", **kwargs):
+        free_gpu()
+        diagnostic_report(texts, labels)
         self.detector.train(texts, labels, output_dir=output_dir, **kwargs)
 
     def evaluate(self, texts, labels):
@@ -190,7 +196,25 @@ class BertLikeDetector:
             data_collator=DataCollatorWithPadding(tokenizer=self.tokenizer)
         )
 
+        epoch_start_time = [None]
+
+        def print_memory_on_epoch_end(args, state, control, **kwargs):
+            if torch.cuda.is_available():
+                epoch_time = time.time() - epoch_start_time[0] if epoch_start_time[0] else 0
+                print(f"🌀 Epoch {state.epoch:.1f}: allocated = {torch.cuda.memory_allocated() / 1024**2:.2f} MB, reserved = {torch.cuda.memory_reserved() / 1024**2:.2f} MB, time = {epoch_time:.2f} sec")
+            return control
+        trainer.add_callback(type("MemoryMonitor", (), {"on_epoch_end": staticmethod(print_memory_on_epoch_end)}))
+
+        epoch_start_time[0] = time.time()
+
         trainer.train()
+
+        if torch.cuda.is_available():
+            print(f"📈 After train start: allocated = {torch.cuda.memory_allocated() / 1024**2:.2f} MB, reserved = {torch.cuda.memory_reserved() / 1024**2:.2f} MB")
+
+        if torch.cuda.is_available():
+            print(f"📈 After train start: allocated = {torch.cuda.memory_allocated() / 1024**2:.2f} MB, reserved = {torch.cuda.memory_reserved() / 1024**2:.2f} MB")
+
         self.is_trained = True
 
     def predict(self, texts):
