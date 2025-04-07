@@ -152,7 +152,7 @@ Datasets used for testing:
 - Email `(processed_email.csv)`.
 
 `Importants notice: All datasets contain ONLY english messages`\
-`TF-IDF + Logistic Regression was set with parameter class_weight='balanced', in order to compensate inbalance in datasets`
+`TF-IDF + Logistic Regression was set with parameter class_weight='balanced', in order to compensate inbalance in datasets`\
 **Time** - shows how long it took a model to predict a batch of messages.
 
 DUE TO ERROR RESULTS BELOW ARE CURRENTLY INVALID
