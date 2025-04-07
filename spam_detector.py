@@ -63,10 +63,10 @@ class Detector:
     def is_model_available(name):
         return name == "tfidf" or Detector.is_valid_hf_model(os.path.join("models", name))
 
-    def train(self, texts, labels, output_dir="model_output", **kwargs):
+    def train(self, texts, labels, output_dir="model_output", logging_dir=None, **kwargs):
         free_gpu()
         diagnostic_report(texts, labels)
-        self.detector.train(texts, labels, output_dir=output_dir, **kwargs)
+        self.detector.train(texts, labels, output_dir=output_dir, logging_dir=logging_dir or "/logs", **kwargs)
 
     def evaluate(self, texts, labels):
         return self.detector.evaluate(texts, labels)
