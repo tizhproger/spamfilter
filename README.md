@@ -151,8 +151,12 @@ Datasets used for testing:
 - SMS (processed_sms.csv)
 - Email `(processed_email.csv)`.
 
+<br/>
+
 `Importants notice: All datasets contain ONLY english messages`\
 `TF-IDF + Logistic Regression was set with parameter class_weight='balanced', in order to compensate inbalance in datasets`
+
+<br/>
 
 **Time** - shows how long it took a model to predict a batch of messages.
 
