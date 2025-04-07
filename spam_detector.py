@@ -163,21 +163,20 @@ class BertLikeDetector:
         self.pipeline = None
         self.is_trained = False
         self.batch_size = 16 if torch.cuda.is_available() else 4
+        self.max_len = self.tokenizer.model_max_length
+        if self.max_len > 1e5:
+            self.max_len = 512
 
-    def train(self, texts, labels, output_dir="bert_model", epochs=3, batch_size=8):
+    def train(self, texts, labels, output_dir="bert_model", logging_dir="/logs", epochs=3, batch_size=8):
         dataset = Dataset.from_dict({"text": texts, "label": labels})
         dataset = dataset.train_test_split(test_size=0.2)
-
-        max_len = self.tokenizer.model_max_length
-        if max_len > 1e5:
-            max_len = 512
 
         def tokenize(example):
             return self.tokenizer(
                 example["text"],
                 truncation=True,
                 padding="max_length",
-                max_length=max_len)
+                max_length=self.max_len)
         
         tokenized = dataset.map(tokenize, batched=True)
 
@@ -187,7 +186,7 @@ class BertLikeDetector:
             per_device_train_batch_size=batch_size if batch_size else self.batch_size,
             per_device_eval_batch_size=batch_size if batch_size else self.batch_size,
             num_train_epochs=epochs,
-            logging_dir=f"{output_dir}/logs",
+            logging_dir=logging_dir,
             save_strategy="no",
             load_best_model_at_end=False
         )
@@ -217,7 +216,7 @@ class BertLikeDetector:
                 tokenizer=self.tokenizer,
                 truncation=True,
                 padding=True,
-                max_length=self.tokenizer.model_max_length,
+                max_length=self.max_len,
                 device=0 if torch.cuda.is_available() else -1,
                 batch_size=self.batch_size)
         
@@ -231,7 +230,7 @@ class BertLikeDetector:
                 tokenizer=self.tokenizer,
                 truncation=True,
                 padding=True,
-                max_length=self.tokenizer.model_max_length,
+                max_length=self.max_len,
                 device=0 if torch.cuda.is_available() else -1,
                 batch_size=self.batch_size,
                 return_all_scores=True)
@@ -265,7 +264,7 @@ class BertLikeDetector:
             tokenizer=self.tokenizer,
             truncation=True,
             padding=True,
-            max_length=self.tokenizer.model_max_length,
+            max_length=self.max_len,
             device=0 if torch.cuda.is_available() else -1,
             batch_size=self.batch_size)
         
