@@ -168,12 +168,16 @@ class BertLikeDetector:
         dataset = Dataset.from_dict({"text": texts, "label": labels})
         dataset = dataset.train_test_split(test_size=0.2)
 
+        max_len = self.tokenizer.model_max_length
+        if max_len > 1e5:
+            max_len = 512
+
         def tokenize(example):
             return self.tokenizer(
                 example["text"],
                 truncation=True,
                 padding="max_length",
-                max_length=self.tokenizer.model_max_length)
+                max_length=max_len)
         
         tokenized = dataset.map(tokenize, batched=True)
 
