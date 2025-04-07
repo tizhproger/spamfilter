@@ -169,7 +169,6 @@ class BertLikeDetector:
 
     def train(self, texts, labels, output_dir="bert_model", logging_dir="/logs", epochs=3, batch_size=8):
         dataset = Dataset.from_dict({"text": texts, "label": labels})
-        dataset = dataset.train_test_split(test_size=0.2)
 
         def tokenize(example):
             return self.tokenizer(
