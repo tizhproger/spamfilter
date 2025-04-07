@@ -26,6 +26,7 @@ pip install .
   
 Initial set of datasets consists of:
 - **SMS** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset).
+- `Processed dataset used for training is: processed_sms.csv`
 
 Example of content:
 ![Dataset Content](images/sms_dataset_content.png)
@@ -35,6 +36,7 @@ Example of content:
 <br/>
 
 - **Twitter** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/greyhatboy/twitter-spam-dataset)
+- `Processed dataset used for training is: processed_twitter.csv`
 
 Example of content:
 ![Dataset Content](images/twitter_ds_content.png)
@@ -44,6 +46,7 @@ Example of content:
 <br/>
 
 - **Email** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/jackksoncsie/spam-email-dataset)
+- `Processed dataset used for training is: processed_email.csv`
 
 Example of content:
 ![Dataset Content](images/email_ds_content.png)
@@ -84,7 +87,31 @@ Example of content:
 <details>
 <summary>Data preparation</summary>
 
-But it is not that easy :)
+Before using datasets we need to unify their structure, for this I used the following code:
+
+`SMS`
+```python
+import pandas as pd
+
+df_sms = pd.read_csv("drive/MyDrive/ml_data/sms_dataset.csv", encoding="latin-1")
+df_sms = df_sms[['v1', 'v2']]
+df_sms.columns = ['label', 'message']
+df_sms['label'] = df_sms['label'].map({'ham': 0, 'spam': 1})
+df_sms.head()
+```
+
+`TWITTER`
+```python
+import pandas as pd
+
+df_twitter = pd.read_csv("drive/MyDrive/ml_data/twitter_dataset.csv", encoding="latin-1")
+df_twitter = df_twitter[['class', 'tweets']]
+df_twitter.columns = ['label', 'message']
+df_twitter.head()
+```
+
+`EMAIL`
+
 Email dataset is a little bit harder to use, as the other ones. The reason for that is an apsence of formatting. At all.
 Message text can contain Subject:, To:, Date: and other fields, which is a big noise for simple classification and even BERTa like models too.
 To fix it, I used a simple cleaning code to remove all unnecessary text pieces. (It costed a text sence in some messages, but it is better than nothing)
@@ -114,19 +141,97 @@ df_email.head()
 
 ## Models Evaluation Report
 
-### TF-IDF + Logistic Regression
+In order to compare how each model performs on different data, I created and ran a benchmark, which different datasets and different popular models.\
+Below I provide a summaary tables for all tests. If you want to run tests by yourself, you can use `benchmark.py` script in folder `tests`.
 
-| Dataset   | Accuracy | Recall (Spam) | Precision (Spam) | F1 (Spam) | FP | FN |
-|-----------|----------|----------------|------------------|-----------|----|----|
-| Full      | 0.9733   | 0.93           | 0.91             | 0.92      | 52 | 38 |
-| No Emails | 0.9874   | 0.97           | 0.94             | 0.95      | 19 | 9  |
+Datasets used for testing:
+- Combined `(sombined_dataset.csv)`
+- Combined NoEmail `(combined_noemail_dataset.csv)`
+- Twitter `(processed_twitter.csv)`
+- SMS (processed_sms.csv)
+- Email `(processed_email.csv)`.
 
-### DeBERTa
+`Importants notice: All datasets contain ONLY english messages`\
+`TF-IDF + Logistic Regression was set with parameter class_weight='balanced', in order to compensate inbalance in datasets`
+**Time** - shows how long it took a model to predict a batch of messages.
 
-| Dataset   | Accuracy | Recall (Spam) | Precision (Spam) | F1 (Spam) | FP | FN |
-|-----------|----------|----------------|------------------|-----------|----|----|
-| Full      | 0.9914   | 0.95           | 1.00             | 0.97      | 1  | 28 |
-| No Emails | 0.9996   | 1.00           | 1.00             | 1.00      | 1  | 0  |
+DUE TO ERROR RESULTS BELOW ARE CURRENTLY INVALID
+
+### BERT Base
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9994 |            1    |               1    |        1    |    1 |    9 |        146 |
+| Combined NoEmail (Twitter + SMS) |     0.9996 |            1    |               1    |        1    |    0 |    4 |         78 |
+| SMS                              |     0.9982 |            0.99 |               0.99 |        0.99 |    5 |    5 |         39 |
+| Twitter                          |     0.9991 |            0.99 |               1    |        1    |    1 |    4 |         39 |
+| Email                            |     0.9998 |            1    |               1    |        1    |    0 |    1 |         72 |
+
+---
+
+### BERT Multilingual
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9916 |            0.97 |               0.98 |        0.98 |   63 |   79 |        148 |
+| Combined NoEmail (Twitter + SMS) |     0.9969 |            0.98 |               1    |        0.99 |    7 |   28 |         78 |
+| SMS                              |     0.9946 |            0.96 |               1    |        0.98 |    3 |   27 |         39 |
+| Twitter                          |     0.9975 |            0.99 |               0.99 |        0.99 |    4 |   10 |         39 |
+| Email                            |     0.9977 |            0.99 |               1    |        1    |    6 |    7 |         73 |
+
+---
+
+### DeBERTa v3 Small
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9991 |            0.99 |               1    |        1    |    0 |   15 |        169 |
+| Combined NoEmail (Twitter + SMS) |     0.9996 |            1    |               1    |        1    |    2 |    2 |         97 |
+| SMS                              |     0.9978 |            0.99 |               0.99 |        0.99 |    5 |    7 |         49 |
+| Twitter                          |     0.9991 |            0.99 |               1    |        1    |    1 |    4 |         50 |
+| Email                            |     0.9983 |            0.99 |               1    |        1    |    2 |    8 |         72 |
+
+---
+
+### DistilBERT
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9992 |            1    |                  1 |        1    |    4 |   10 |         81 |
+| Combined NoEmail (Twitter + SMS) |     0.9995 |            1    |                  1 |        1    |    2 |    4 |         43 |
+| SMS                              |     0.9986 |            0.99 |                  1 |        0.99 |    2 |    6 |         21 |
+| Twitter                          |     0.9989 |            0.99 |                  1 |        1    |    2 |    4 |         21 |
+| Email                            |     0.9988 |            1    |                  1 |        1    |    1 |    6 |         39 |
+
+---
+
+### RoBERTa Base
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9951 |            0.97 |               1    |        0.99 |    8 |   74 |        150 |
+| Combined NoEmail (Twitter + SMS) |     0.9966 |            0.98 |               1    |        0.99 |    2 |   36 |         80 |
+| SMS                              |     0.9966 |            0.98 |               0.99 |        0.99 |    5 |   14 |         40 |
+| Twitter                          |     0.9905 |            0.96 |               0.97 |        0.96 |   20 |   33 |         40 |
+| Email                            |     0.9993 |            1    |               1    |        1    |    0 |    4 |         73 |
+
+---
+
+### TF-IDF + LR
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9865 |            0.98 |               0.94 |        0.96 |  179 |   48 |         10 |
+| Combined NoEmail (Twitter + SMS) |     0.995  |            0.99 |               0.97 |        0.98 |   46 |   10 |          6 |
+| SMS                              |     0.993  |            0.98 |               0.97 |        0.97 |   26 |   13 |          3 |
+| Twitter                          |     0.9928 |            0.98 |               0.96 |        0.97 |   28 |   12 |          3 |
+| Email                            |     0.9921 |            1    |               0.97 |        0.98 |   42 |    3 |          4 |
+
+---
+
+### XLM-RoBERTa Base
+| Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Combined (Email + Twitter + SMS) |     0.9695 |            0.9  |               0.92 |        0.91 |  231 |  283 |        155 |
+| Combined NoEmail (Twitter + SMS) |     0.995  |            0.97 |               0.99 |        0.98 |   10 |   46 |         80 |
+| SMS                              |     0.9973 |            0.99 |               0.99 |        0.99 |    5 |   10 |         40 |
+| Twitter                          |     0.9964 |            0.98 |               1    |        0.99 |    3 |   17 |         41 |
+| Email                            |     0.9883 |            0.98 |               0.98 |        0.98 |   33 |   34 |         77 |
+
 
 ---
 
