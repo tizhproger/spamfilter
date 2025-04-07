@@ -63,10 +63,10 @@ class Detector:
     def is_model_available(name):
         return name == "tfidf" or Detector.is_valid_hf_model(os.path.join("models", name))
 
-    def train(self, texts, labels, output_dir="model_output", logging_dir=None, **kwargs):
+    def train(self, texts, labels, output_dir="model_output", logging_dir=None, eval_texts=None, eval_labels=None, **kwargs):
         free_gpu()
         diagnostic_report(texts, labels)
-        self.detector.train(texts, labels, output_dir=output_dir, logging_dir=logging_dir or "/logs", **kwargs)
+        self.detector.train(texts, labels, output_dir=output_dir, logging_dir=logging_dir or "/logs", eval_texts=eval_texts, eval_labels=eval_labels, **kwargs)
 
     def evaluate(self, texts, labels):
         return self.detector.evaluate(texts, labels)
@@ -167,7 +167,7 @@ class BertLikeDetector:
         if self.max_len > 1e5:
             self.max_len = 512
 
-    def train(self, texts, labels, output_dir="bert_model", logging_dir="/logs", epochs=3, batch_size=8):
+    def train(self, texts, labels, output_dir="bert_model", logging_dir="/logs", epochs=3, batch_size=8, eval_texts=None, eval_labels=None):
         dataset = Dataset.from_dict({"text": texts, "label": labels})
 
         def tokenize(example):
@@ -179,9 +179,14 @@ class BertLikeDetector:
         
         tokenized = dataset.map(tokenize, batched=True)
 
+        eval_dataset = None
+        if eval_texts is not None and eval_labels is not None:
+            eval_data = Dataset.from_dict({"text": eval_texts, "label": eval_labels})
+            eval_dataset = eval_data.map(tokenize, batched=True)
+
         args = TrainingArguments(
             output_dir=output_dir,
-            eval_strategy="epoch",
+            eval_strategy="epoch" if eval_dataset is not None else "no",
             per_device_train_batch_size=batch_size if batch_size else self.batch_size,
             per_device_eval_batch_size=batch_size if batch_size else self.batch_size,
             num_train_epochs=epochs,
@@ -193,8 +198,8 @@ class BertLikeDetector:
         trainer = Trainer(
             model=self.model,
             args=args,
-            train_dataset=tokenized["train"],
-            eval_dataset=tokenized["test"],
+            train_dataset=tokenized,
+            eval_dataset=eval_dataset,
             data_collator=DataCollatorWithPadding(tokenizer=self.tokenizer)
         )
 
