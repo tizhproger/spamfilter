@@ -5,6 +5,6 @@ __pycache__/
 *.log
 *.csv
 datasets/
-models/
+tests/
 images/
 checkpoints/
