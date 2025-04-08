@@ -1,23 +1,144 @@
-**Spamfilter** — is a simple and extensible Python library for spam detection with support for TF-IDF and transformers (BERT, DistilBERT, DeBERTa, etc.).
+# 📦 SpamFilter — Multilingual Spam Classification Toolkit
+
+**SpamFilter** — is a modular Python toolkit for building, training, and evaluating spam classifiers using traditional (TF-IDF + LogisticRegression) and transformer-based (BERT, RoBERTa, etc.) models. It includes built-in benchmarking, diagnostics, and utilities.
 
 ## Functionality
 
-- Text classification into `spam` and `ham`
-- Support for several models: TF-IDF + Logistic Regression, BERT based models, any HugginFace model. (Included pretrained models: TF-IDF + Logistic Regression, DeBERTa v3 small, DistilBERT, RuBERT)
+- Text classification into `1` and `0` as `spam` and `not spam` respectively
+- Support for different models: TF-IDF + Logistic Regression (out of the box), BERT based models, any HugginFace model. (Included pretrained models: TF-IDF + Logistic Regression, DeBERTa v3 small, DistilBERT, RuBERT)
 - Training, evaluating and benchmarking of models out of the box
-- Support of pretrained models and training on user data
+- Supports training on user data
 - Prediction, probabilities, evaluation, saving/loading
 - Supports CUDA (if available) for processing
 
 All datasets used for training the prepaired models, are listed in folder "datasets". In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
 
-## Installation
+## 🔧 Installation
+
+You can install dependencies using:
 
 ```bash
-git clone https://github.com/tizhproger/spamfilter.git
-cd spamfilter
-pip install .
+pip install -r requirements.txt
 ```
+
+Or manually:
+
+```bash
+pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
+```
+
+## 🚀 Usage
+
+### ✅ Supported Models
+
+- `TF-IDF + LogisticRegression` (lightweight baseline)
+- Pretrained HuggingFace models:
+  - `distilbert-base-uncased`
+  - `bert-base-uncased`
+  - `microsoft/deberta-v3-small`
+  - `xlm-roberta-base`
+  - `cointegrated/rubert-tiny`, etc.
+- You can load your own HuggingFace model via `Detector.custom(...)`
+
+---
+
+### 📦 Initializing a Detector
+
+```python
+from spam_detector import Detector
+
+clf = Detector("tfidf")  # Fast traditional model
+clf = Detector("distilbert")  # Pretrained transformer, which must be is saved in "models" folder
+
+# Load a custom model from HuggingFace
+clf = Detector.custom("cointegrated/rubert-tiny", save_as="rubert_tiny")
+```
+
+---
+
+### 🧠 Training a Model
+
+```python
+clf.train(texts, labels)  # Simple training
+
+# With validation
+clf.train(
+    texts, labels,
+    eval_texts=X_val,
+    eval_labels=y_val
+)
+```
+
+---
+
+### 📈 Model Evaluation
+
+```python
+clf.evaluate(X_test, y_test)
+```
+
+Outputs accuracy, confusion matrix, precision/recall/F1 scores.
+
+---
+
+### 🔍 Inference
+
+```python
+clf.predict("Congratulations, you won!")
+clf.predict_batch(["Hello!", "Win a free iPhone now!"])
+```
+
+---
+
+### 💾 Saving and Loading Models
+
+```python
+clf.save("models/<model_name>")  # Saves to models/<model_name>
+clf.load("models/<model_name>")  # Loads from the same folder
+```
+
+---
+
+### 📊 Benchmark Inference Speed
+
+```python
+clf.benchmark(texts)  # Measures prediction time in seconds
+```
+
+---
+
+### 🛠 Utilities
+
+```python
+from utils import diagnostic_report, free_gpu
+
+diagnostic_report(texts, labels)  # Shows sample size, label counts, avg length, memory usage etc.
+free_gpu()  # Clears CUDA memory
+```
+
+---
+
+### 📚 Model Management
+
+```python
+Detector.list_models()  # List available models in /models
+Detector.is_model_available("rubert")  # Check if model exists in "models" folder
+```
+
+---
+
+## 📌 Example (full cycle)
+
+```python
+clf = Detector("xlm-roberta")
+
+clf.train(X_train, y_train, eval_texts=X_test, eval_labels=y_test)
+
+clf.evaluate(X_test, y_test)
+predictions = clf.predict_batch(X_test[:10])
+```
+
+---
 
 ## Datasets
 
@@ -158,7 +279,10 @@ Datasets used for testing:
 
 <br/>
 
-**Time** - shows how long it took a model to predict a batch of messages.
+**Time** - shows how long it took a model to predict a batch of messages. Which is the whole test array.\
+
+`Why not just a few messages?`
+- Because in this way we can see, how (probably) the model will handle a big amount of data at once. For example if we need to procees messages in chat in a pack. And also, if you will test models on a 2-3 messages, time differences can be small to show anything.
 
 <details>
   <summary>English Datasets</summary>
@@ -268,21 +392,49 @@ Datasets used for testing:
 
 ### Metric Comparison
 
-![Metric Comparison](metrics_comparison.png)
+I used only one RU dataset and only 3 models that support this language, so the bars for RU models can be not very representetive.\
+HOWEVER, it still a valuable data and I couldn't throw it away.
 
-![Metric Comparison](metrics_comparison.png)
+`Important: During benchmarking, datasets were manually splitted into train and test parts, in fraction of 80/20 to avoid overfitting.`\
+`You can see it in benchmark.py if you want.`
 
-![Metric Comparison](metrics_comparison.png)
+`I am not guarantee that these tests are 100% accurate, it is just data I gethered.`
+
+<br/>
+
+The first picture show the distribution of F1 score across datasets.
+
+![](images/f1_score.png)
+
+<br/>
+
+This graph visually shows how differently models handled datasets.
+
+![](images/model_dataset_heatmap.png)
+
+<br/>
+
+Here we add a time value into consideration.
+
+![](images/combined_ranking.png)
 
 ## Findings
 
-- **Email data introduces noise**, increasing false negatives and lowering recall.
-- **TF-IDF** is more sensitive to structured noise (e.g., headers, HTML) in email content, but still effective.
-- **DeBERTa** consistently delivers high performance across datasets, achieving near-perfect results when trained without noisy email data.
+- **Email dataset** as a standalone data source shows pretty good results, even the best. But the combination of it with others, creates a slight noise.
+- **Combination of datasets** improves the scores. Maybe because of samples amount, or a data diversity, not sure.
+- **BERT models** show better results than Logistic Regression (which is obvoius), but it depends on the data and a model iself. RoBERTa showed itself worse, despite being BERT family model like others.
+- **Liveness of messages** have a bigger impact on models (Except Regression). We can see it on SMS dataset, but it depends. Interesting why Twitter was worse than SMS.
+- **Time combination** shows pretty obvious thing, but Logistic Regression seem to be over excited :)
 
 ---
 
 ## Recommendation
 
-- For simplicity and reproducibility, **TF-IDF + LogisticRegression** remains a solid option.
-- For **highest accuracy and robustness**, especially across diverse text formats, **DeBERTa is the better choice**.
+- **TF-IDF + LogisticRegression** remains a solid option, with a compromises. Use it if you need simple and fast solution, and ready to sacrifice accuracy.
+- **DistilBERT** showed a great performance and accuracy. I will call it a mid tier solution.
+- **Dataset** diversity and volume plays a vital role. I can recommend something between 5-10K of samples in total.
+- **Classes distribution** is important but can be lowered, not lower than 80/20 proportion.
+
+<br/>
+
+`P.S. This validation was not a scientific research, it was a simple comparison on data I found and a test of a tool :)`
