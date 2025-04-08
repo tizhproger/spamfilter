@@ -13,7 +13,22 @@
 
 All datasets used for training the prepaired models, are listed in folder "datasets". In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
 
+<br/>
+
 ## 🔧 Installation
+
+If you are developing or testing this project locally, you can install it as an editable package:
+
+```bash
+git clone https://github.com/yourusername/spamfilter.git
+cd spamfilter
+pip install -e .
+```
+
+This allows you to import `spam_detector` directly and reflect live changes in your environment.
+
+---
+
 
 You can install dependencies using:
 
@@ -26,6 +41,8 @@ Or manually:
 ```bash
 pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 ```
+
+<br/>
 
 ## 🚀 Usage
 
@@ -90,6 +107,22 @@ clf.predict_batch(["Hello!", "Win a free iPhone now!"])
 
 ---
 
+### 📊 Getting Prediction Confidence
+
+You can return both the predicted label and the confidence score:
+
+```python
+clf.predict("Win a free prize!", return_proba=True)
+# {'label': 1, 'score': 0.987}
+
+clf.predict_batch(["Hi", "Limited offer!"], return_proba=True)
+# [{'label': 0, 'score': 0.993}, {'label': 1, 'score': 0.978}]
+```
+
+The `return_proba=True` flag works for all model types (TF-IDF or Transformers).
+
+---
+
 ### 💾 Saving and Loading Models
 
 ```python
@@ -139,6 +172,8 @@ predictions = clf.predict_batch(X_test[:10])
 ```
 
 ---
+
+<br/>
 
 ## Datasets
 
@@ -259,6 +294,8 @@ df_email.head()
 ```
 
 </details>
+
+<br/>
 
 ## Models Evaluation Report
 
@@ -388,6 +425,8 @@ Datasets used for testing:
 
 </details>
 
+<br/>
+
 ## Visualizations
 
 ### Metric Comparison
@@ -418,6 +457,8 @@ Here we add a time value into consideration.
 
 ![](images/combined_ranking.png)
 
+<br/>
+
 ## Findings
 
 - **Email dataset** as a standalone data source shows pretty good results, even the best. But the combination of it with others, creates a slight noise.
@@ -427,6 +468,8 @@ Here we add a time value into consideration.
 - **Time combination** shows pretty obvious thing, but Logistic Regression seem to be over excited :)
 
 ---
+
+<br/>
 
 ## Recommendation
 
