@@ -160,85 +160,109 @@ Datasets used for testing:
 
 **Time** - shows how long it took a model to predict a batch of messages.
 
-DUE TO ERROR RESULTS BELOW ARE CURRENTLY INVALID
+<details>
+  <summary>English Datasets</summary>
 
 ### BERT Base
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9994 |            1    |               1    |        1    |    1 |    9 |        146 |
-| Combined NoEmail (Twitter + SMS) |     0.9996 |            1    |               1    |        1    |    0 |    4 |         78 |
-| SMS                              |     0.9982 |            0.99 |               0.99 |        0.99 |    5 |    5 |         39 |
-| Twitter                          |     0.9991 |            0.99 |               1    |        1    |    1 |    4 |         39 |
-| Email                            |     0.9998 |            1    |               1    |        1    |    0 |    1 |         72 |
+| Combined (Email + Twitter + SMS) |     0.9941 |            0.97 |               0.99 |        0.98 |    4 |   16 |         29 |
+| Combined NoEmail (Twitter + SMS) |     0.9978 |            0.99 |               1    |        0.99 |    1 |    4 |         16 |
+| SMS                              |     0.9937 |            0.97 |               0.99 |        0.98 |    2 |    5 |          8 |
+| Twitter                          |     0.991  |            0.95 |               0.98 |        0.97 |    3 |    7 |          8 |
+| Email                            |     0.9948 |            0.98 |               1    |        0.99 |    0 |    6 |         14 |
 
 ---
 
 ### BERT Multilingual
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9916 |            0.97 |               0.98 |        0.98 |   63 |   79 |        148 |
-| Combined NoEmail (Twitter + SMS) |     0.9969 |            0.98 |               1    |        0.99 |    7 |   28 |         78 |
-| SMS                              |     0.9946 |            0.96 |               1    |        0.98 |    3 |   27 |         39 |
-| Twitter                          |     0.9975 |            0.99 |               0.99 |        0.99 |    4 |   10 |         39 |
-| Email                            |     0.9977 |            0.99 |               1    |        1    |    6 |    7 |         73 |
+| Combined (Email + Twitter + SMS) |     0.9887 |            0.96 |               0.97 |        0.97 |   17 |   21 |         29 |
+| Combined NoEmail (Twitter + SMS) |     0.9942 |            0.98 |               0.98 |        0.98 |    6 |    7 |         15 |
+| SMS                              |     0.9946 |            0.97 |               0.99 |        0.98 |    2 |    4 |          8 |
+| Twitter                          |     0.9901 |            0.96 |               0.97 |        0.96 |    5 |    6 |          8 |
+| Email                            |     0.9895 |            0.97 |               0.99 |        0.98 |    3 |    9 |         14 |
 
 ---
 
 ### DeBERTa v3 Small
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9991 |            0.99 |               1    |        1    |    0 |   15 |        169 |
-| Combined NoEmail (Twitter + SMS) |     0.9996 |            1    |               1    |        1    |    2 |    2 |         97 |
-| SMS                              |     0.9978 |            0.99 |               0.99 |        0.99 |    5 |    7 |         49 |
-| Twitter                          |     0.9991 |            0.99 |               1    |        1    |    1 |    4 |         50 |
-| Email                            |     0.9983 |            0.99 |               1    |        1    |    2 |    8 |         72 |
+| Combined (Email + Twitter + SMS) |     0.9956 |            0.98 |               0.99 |        0.99 |    5 |   10 |         34 |
+| Combined NoEmail (Twitter + SMS) |     0.9973 |            0.99 |               0.99 |        0.99 |    2 |    4 |         19 |
+| SMS                              |     0.9937 |            0.97 |               0.99 |        0.98 |    2 |    5 |         10 |
+| Twitter                          |     0.9928 |            0.97 |               0.98 |        0.97 |    3 |    5 |         10 |
+| Email                            |     0.9913 |            0.97 |               1    |        0.98 |    1 |    9 |         14 |
 
 ---
 
 ### DistilBERT
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9992 |            1    |                  1 |        1    |    4 |   10 |         81 |
-| Combined NoEmail (Twitter + SMS) |     0.9995 |            1    |                  1 |        1    |    2 |    4 |         43 |
-| SMS                              |     0.9986 |            0.99 |                  1 |        0.99 |    2 |    6 |         21 |
-| Twitter                          |     0.9989 |            0.99 |                  1 |        1    |    2 |    4 |         21 |
-| Email                            |     0.9988 |            1    |                  1 |        1    |    1 |    6 |         39 |
+| Combined (Email + Twitter + SMS) |     0.9941 |            0.98 |               0.99 |        0.98 |    7 |   13 |         16 |
+| Combined NoEmail (Twitter + SMS) |     0.9991 |            0.99 |               1    |        1    |    0 |    2 |          8 |
+| SMS                              |     0.9919 |            0.97 |               0.97 |        0.97 |    4 |    5 |          4 |
+| Twitter                          |     0.991  |            0.95 |               0.99 |        0.97 |    2 |    8 |          4 |
+| Email                            |     0.9913 |            0.98 |               0.99 |        0.98 |    3 |    7 |          8 |
 
 ---
 
 ### RoBERTa Base
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9951 |            0.97 |               1    |        0.99 |    8 |   74 |        150 |
-| Combined NoEmail (Twitter + SMS) |     0.9966 |            0.98 |               1    |        0.99 |    2 |   36 |         80 |
-| SMS                              |     0.9966 |            0.98 |               0.99 |        0.99 |    5 |   14 |         40 |
-| Twitter                          |     0.9905 |            0.96 |               0.97 |        0.96 |   20 |   33 |         40 |
-| Email                            |     0.9993 |            1    |               1    |        1    |    0 |    4 |         73 |
+| Combined (Email + Twitter + SMS) |     0.9881 |            0.96 |               0.97 |        0.96 |   19 |   21 |         30 |
+| Combined NoEmail (Twitter + SMS) |     0.9906 |            0.96 |               0.97 |        0.96 |    9 |   12 |         16 |
+| SMS                              |     0.9946 |            0.97 |               0.99 |        0.98 |    2 |    4 |          8 |
+| Twitter                          |     0.9928 |            0.95 |               0.99 |        0.97 |    1 |    7 |          8 |
+| Email                            |     0.9913 |            0.97 |               1    |        0.98 |    1 |    9 |         14 |
 
 ---
 
 ### TF-IDF + LR
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9865 |            0.98 |               0.94 |        0.96 |  179 |   48 |         10 |
-| Combined NoEmail (Twitter + SMS) |     0.995  |            0.99 |               0.97 |        0.98 |   46 |   10 |          6 |
-| SMS                              |     0.993  |            0.98 |               0.97 |        0.97 |   26 |   13 |          3 |
-| Twitter                          |     0.9928 |            0.98 |               0.96 |        0.97 |   28 |   12 |          3 |
-| Email                            |     0.9921 |            1    |               0.97 |        0.98 |   42 |    3 |          4 |
+| Combined (Email + Twitter + SMS) |     0.9742 |            0.93 |               0.92 |        0.92 |   48 |   39 |          2 |
+| Combined NoEmail (Twitter + SMS) |     0.9888 |            0.95 |               0.96 |        0.96 |   12 |   13 |          1 |
+| SMS                              |     0.9785 |            0.93 |               0.91 |        0.92 |   13 |   11 |          1 |
+| Twitter                          |     0.9812 |            0.94 |               0.92 |        0.93 |   12 |    9 |          1 |
+| Email                            |     0.9895 |            0.99 |               0.97 |        0.98 |    9 |    3 |          1 |
 
 ---
 
 ### XLM-RoBERTa Base
 | Dataset                          |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
 |:---------------------------------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
-| Combined (Email + Twitter + SMS) |     0.9695 |            0.9  |               0.92 |        0.91 |  231 |  283 |        155 |
-| Combined NoEmail (Twitter + SMS) |     0.995  |            0.97 |               0.99 |        0.98 |   10 |   46 |         80 |
-| SMS                              |     0.9973 |            0.99 |               0.99 |        0.99 |    5 |   10 |         40 |
-| Twitter                          |     0.9964 |            0.98 |               1    |        0.99 |    3 |   17 |         41 |
-| Email                            |     0.9883 |            0.98 |               0.98 |        0.98 |   33 |   34 |         77 |
+| Combined (Email + Twitter + SMS) |     0.979  |            0.92 |               0.95 |        0.94 |   28 |   43 |         31 |
+| Combined NoEmail (Twitter + SMS) |     0.9897 |            0.93 |               0.99 |        0.96 |    3 |   20 |         16 |
+| SMS                              |     0.9928 |            0.97 |               0.98 |        0.97 |    3 |    5 |          8 |
+| Twitter                          |     0.9857 |            0.93 |               0.97 |        0.95 |    5 |   11 |          8 |
+| Email                            |     0.9887 |            0.96 |               0.99 |        0.98 |    2 |   11 |         15 |
 
+</details>
+
+<details>
+  <summary>Russian Datasets</summary>
+
+### BERT Multilingual
+| Dataset   |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:----------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Telegram  |     0.9821 |            0.98 |               0.98 |        0.98 |   24 |   35 |         26 |
 
 ---
+
+### RuBERT Tiny
+| Dataset   |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:----------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Telegram  |     0.9821 |            0.98 |               0.98 |        0.98 |   28 |   31 |         11 |
+
+---
+
+### XLM-RoBERTa Base
+| Dataset   |   Accuracy |   Recall (Spam) |   Precision (Spam) |   F1 (Spam) |   FP |   FN |   Time (s) |
+|:----------|-----------:|----------------:|-------------------:|------------:|-----:|-----:|-----------:|
+| Telegram  |     0.9746 |            0.96 |               0.99 |        0.97 |   23 |   61 |         25 |
+
+</details>
 
 ## Visualizations
 
@@ -246,11 +270,9 @@ DUE TO ERROR RESULTS BELOW ARE CURRENTLY INVALID
 
 ![Metric Comparison](metrics_comparison.png)
 
-### Confusion Errors (FP + FN)
+![Metric Comparison](metrics_comparison.png)
 
-![Confusion Matrix Comparison](confusion_comparison.png)
-
----
+![Metric Comparison](metrics_comparison.png)
 
 ## Findings
 
