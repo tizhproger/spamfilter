@@ -13,7 +13,6 @@
 
 All datasets used for training the prepaired models, are listed in folder "datasets". In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
 
-<br/>
 
 ## 🔧 Installation
 
@@ -42,7 +41,6 @@ Or manually:
 pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 ```
 
-<br/>
 
 ## 🚀 Usage
 
@@ -173,7 +171,6 @@ predictions = clf.predict_batch(X_test[:10])
 
 ---
 
-<br/>
 
 ## Datasets
 
@@ -295,7 +292,6 @@ df_email.head()
 
 </details>
 
-<br/>
 
 ## Models Evaluation Report
 
@@ -425,7 +421,6 @@ Datasets used for testing:
 
 </details>
 
-<br/>
 
 ## Visualizations
 
@@ -457,7 +452,6 @@ Here we add a time value into consideration.
 
 ![](images/combined_ranking.png)
 
-<br/>
 
 ## Findings
 
@@ -469,7 +463,6 @@ Here we add a time value into consideration.
 
 ---
 
-<br/>
 
 ## Recommendation
 
