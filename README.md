@@ -1,4 +1,4 @@
-# 📦 SpamFilter — Multilingual Spam Classification Toolkit
+# SpamFilter — Multilingual Spam Classification Toolkit
 
 **SpamFilter** — is a modular Python toolkit for building, training, and evaluating spam classifiers using traditional (TF-IDF + LogisticRegression) and transformer-based (BERT, RoBERTa, etc.) models. It includes built-in benchmarking, diagnostics, and utilities.
 
@@ -14,17 +14,17 @@
 All datasets used for training the prepaired models, are listed in folder "datasets". In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
 
 
-## 🔧 Installation
+## Installation
 
 If you are developing or testing this project locally, you can install it as an editable package:
 
 ```bash
-git clone https://github.com/yourusername/spamfilter.git
+git clone https://github.com/tizhproger/spamfilter.git
 cd spamfilter
 pip install -e .
 ```
 
-This allows you to import `spam_detector` directly and reflect live changes in your environment.
+This allows you to import `spam_detector` directly as a package, without paths.
 
 ---
 
@@ -42,28 +42,27 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 ```
 
 
-## 🚀 Usage
+## Usage
 
-### ✅ Supported Models
+### Supported Models
 
 - `TF-IDF + LogisticRegression` (lightweight baseline)
 - Pretrained HuggingFace models:
   - `distilbert-base-uncased`
   - `bert-base-uncased`
-  - `microsoft/deberta-v3-small`
-  - `xlm-roberta-base`
-  - `cointegrated/rubert-tiny`, etc.
+  - `cointegrated/rubert-tiny`
+  - etc.
 - You can load your own HuggingFace model via `Detector.custom(...)`
 
 ---
 
-### 📦 Initializing a Detector
+### Initializing a Detector
 
 ```python
 from spam_detector import Detector
 
 clf = Detector("tfidf")  # Fast traditional model
-clf = Detector("distilbert")  # Pretrained transformer, which must be is saved in "models" folder
+clf = Detector("distilbert")  # Pretrained transformer, which must be saved in "models" folder
 
 # Load a custom model from HuggingFace
 clf = Detector.custom("cointegrated/rubert-tiny", save_as="rubert_tiny")
@@ -71,7 +70,7 @@ clf = Detector.custom("cointegrated/rubert-tiny", save_as="rubert_tiny")
 
 ---
 
-### 🧠 Training a Model
+### Training a Model
 
 ```python
 clf.train(texts, labels)  # Simple training
@@ -86,7 +85,7 @@ clf.train(
 
 ---
 
-### 📈 Model Evaluation
+### Model Evaluation
 
 ```python
 clf.evaluate(X_test, y_test)
@@ -96,7 +95,7 @@ Outputs accuracy, confusion matrix, precision/recall/F1 scores.
 
 ---
 
-### 🔍 Inference
+### Inference
 
 ```python
 clf.predict("Congratulations, you won!")
@@ -105,7 +104,7 @@ clf.predict_batch(["Hello!", "Win a free iPhone now!"])
 
 ---
 
-### 📊 Getting Prediction Confidence
+### Getting Prediction Confidence
 
 You can return both the predicted label and the confidence score:
 
@@ -121,16 +120,17 @@ The `return_proba=True` flag works for all model types (TF-IDF or Transformers).
 
 ---
 
-### 💾 Saving and Loading Models
+### Saving and Loading Models
 
 ```python
-clf.save("models/<model_name>")  # Saves to models/<model_name>
-clf.load("models/<model_name>")  # Loads from the same folder
+clf.save("models/")  # Saves to models
+clf.load("models/")  # Loads from the folder
 ```
+You can call it without parameters, in that case models will be loaded/saved from/to default `models` folder.
 
 ---
 
-### 📊 Benchmark Inference Speed
+### Benchmark Inference Speed
 
 ```python
 clf.benchmark(texts)  # Measures prediction time in seconds
@@ -138,7 +138,7 @@ clf.benchmark(texts)  # Measures prediction time in seconds
 
 ---
 
-### 🛠 Utilities
+### Utilities
 
 ```python
 from utils import diagnostic_report, free_gpu
@@ -149,7 +149,7 @@ free_gpu()  # Clears CUDA memory
 
 ---
 
-### 📚 Model Management
+### Model Management
 
 ```python
 Detector.list_models()  # List available models in /models
@@ -158,7 +158,7 @@ Detector.is_model_available("rubert")  # Check if model exists in "models" folde
 
 ---
 
-## 📌 Example (full cycle)
+## Example (full cycle)
 
 ```python
 clf = Detector("xlm-roberta")
@@ -295,19 +295,19 @@ df_email.head()
 
 ## Models Evaluation Report
 
-In order to compare how each model performs on different data, I created and ran a benchmark, which different datasets and different popular models.\
-Below I provide a summaary tables for all tests. If you want to run tests by yourself, you can use `benchmark.py` script in folder `tests`.
+In order to compare how each model performs on different data, I created and ran a benchmark, whith different datasets and popular models.\
+Below I provide a summary tables for all tests. If you want to run it by yourself, you can use `benchmark.py` script in folder `tests`.
 
 Datasets used for testing:
 - Combined `(sombined_dataset.csv)`
 - Combined NoEmail `(combined_noemail_dataset.csv)`
 - Twitter `(processed_twitter.csv)`
-- SMS (processed_sms.csv)
+- SMS `(processed_sms.csv)`
 - Email `(processed_email.csv)`.
 
 <br/>
 
-`Importants notice: All datasets contain ONLY english messages`\
+`Importants notice: All datasets (except Telegram) contain ONLY english messages`\
 `TF-IDF + Logistic Regression was set with parameter class_weight='balanced', in order to compensate inbalance in datasets`
 
 <br/>
@@ -316,6 +316,9 @@ Datasets used for testing:
 
 `Why not just a few messages?`
 - Because in this way we can see, how (probably) the model will handle a big amount of data at once. For example if we need to procees messages in chat in a pack. And also, if you will test models on a 2-3 messages, time differences can be small to show anything.
+
+I can also assume, that F1 score of models was affected by classes imbalance. However, I had two datasets with different distributions: Telegram (RU) - almost 50/50 balance, SMS (EN) - 80/20 or a bit different.
+As training showed, accuracy remained high, F1 score was (just by view) a bit better on imbalanced EN datasets, on one and the same model ¯⁠\⁠_⁠(⁠ツ⁠)⁠_⁠/⁠¯
 
 <details>
   <summary>English Datasets</summary>
@@ -427,7 +430,7 @@ Datasets used for testing:
 ### Metric Comparison
 
 I used only one RU dataset and only 3 models that support this language, so the bars for RU models can be not very representetive.\
-HOWEVER, it still a valuable data and I couldn't throw it away.
+HOWEVER, it is still a valuable data and I couldn't throw it away.
 
 `Important: During benchmarking, datasets were manually splitted into train and test parts, in fraction of 80/20 to avoid overfitting.`\
 `You can see it in benchmark.py if you want.`
@@ -459,7 +462,7 @@ Here we add a time value into consideration.
 - **Combination of datasets** improves the scores. Maybe because of samples amount, or a data diversity, not sure.
 - **BERT models** show better results than Logistic Regression (which is obvoius), but it depends on the data and a model iself. RoBERTa showed itself worse, despite being BERT family model like others.
 - **Liveness of messages** have a bigger impact on models (Except Regression). We can see it on SMS dataset, but it depends. Interesting why Twitter was worse than SMS.
-- **Time combination** shows pretty obvious thing, but Logistic Regression seem to be over excited :)
+- **Time combination** shows pretty obvious thing, but Logistic Regression seem to be overexcited :)
 
 ---
 
