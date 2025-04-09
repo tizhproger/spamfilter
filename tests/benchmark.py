@@ -15,7 +15,8 @@ def evaluate_model(model_name, path_name, texts, labels, dataset_name, save=True
         "roberta": "RoBERTa Base",
         #"rubert": "RuBERT Tiny", # use ONLY with RU dataset
         "xlm_roberta": "XLM-RoBERTa Base",
-        "bert_multi": "BERT Multilingual"
+        "bert_multi": "BERT Multilingual",
+        "distilbert_multi": "DistilBERT Multilingual",
     }
 
     print(f"🔧 Training new model: {model_names[path_name]}")
@@ -82,9 +83,10 @@ if __name__ == "__main__":
         "deberta": "microsoft/deberta-v3-small",
         "bert": "bert-base-uncased",
         "roberta": "roberta-base",
-        #"rubert": "cointegrated/rubert-tiny2",
+        #"rubert": "cointegrated/rubert-tiny2", # use ONLY with RU dataset
         "xlm_roberta": "xlm-roberta-base",
-        "bert_multi": "bert-base-multilingual-cased"}
+        "bert_multi": "bert-base-multilingual-cased",
+        "distilbert_multi": "distilbert-base-multilingual-cased"}
 
     df_results = benchmark_all(datasets, models)
     df_results.to_csv("benchmark_results.csv", index=False)
