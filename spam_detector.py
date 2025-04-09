@@ -59,7 +59,7 @@ class Detector:
         return all(os.path.isfile(os.path.join(path, f)) for f in required_files)
     
     @classmethod
-    def custom(cls, model_name, save_as=None):
+    def custom(cls, model_name):
         """Creates a Detector with a custom Hugging Face model.
 
         Args:
@@ -69,8 +69,7 @@ class Detector:
         Returns:
             Detector: A Detector instance with the specified model.
         """
-        path = os.path.join("models", save_as or model_name.replace("/", "_"))
-        return cls(model=model_name, model_dir=path, load_if_exists=False)
+        return cls(model=model_name, model_dir=None, load_if_exists=False)
     
     @staticmethod
     def list_models():
@@ -155,17 +154,16 @@ class Detector:
         """
         return [self.predict(t) for t in texts]
 
-    def save(self, path="models/"):
+    def save(self, path):
         """
         Saves the current detector model to the specified directory.
 
         Args:
             path (str): The directory where the model should be saved. Defaults to "models/".
         """
-        model_path = os.path.join(path, self.model_name)
-        self.detector.save(model_path)
+        self.detector.save(path)
 
-    def load(self, path="models/"):
+    def load(self, path):
         """
         Loads the model from the specified directory.
 
@@ -276,7 +274,7 @@ class TFIDFDetector:
         print("Confusion matrix:\n", confusion_matrix(labels, y_pred))
         print("\nClassification report:\n", classification_report(labels, y_pred))
 
-    def save(self, path="models/") -> None:
+    def save(self, path) -> None:
         """
         Saves the model and vectorizer to the given path.
 
@@ -288,7 +286,7 @@ class TFIDFDetector:
         joblib.dump(self.vectorizer, os.path.join(path, "vectorizer.pkl"))
         joblib.dump(self.model, os.path.join(path, "model.pkl"))
 
-    def load(self, path="models/") -> None:
+    def load(self, path) -> None:
         """
         Loads the model and vectorizer from the given path.
 
@@ -452,33 +450,31 @@ class BertLikeDetector:
         print("Accuracy:", accuracy_score(labels, preds))
         return preds
 
-    def save(self, path="models/"): 
+    def save(self, path): 
         """
         Saves the model and tokenizer to the specified path.
 
         Args:
-            path (str): The directory to save the model and tokenizer to. Defaults to "models/".
+            path (str): The directory to save the model and tokenizer to.
         """
         if not os.path.exists(path):
             os.makedirs(path)
 
-        full_path = os.path.join(path, self.model_name)
-        self.model.save_pretrained(full_path)
-        self.tokenizer.save_pretrained(full_path)
+        self.model.save_pretrained(path)
+        self.tokenizer.save_pretrained(path)
 
-    def load(self, path="models/"):
+    def load(self, path):
         """
         Loads the model and tokenizer from the specified path and initializes the pipeline.
 
         Args:
-            path (str): The directory from which to load the model and tokenizer. Defaults to "models/".
+            path (str): The directory from which to load the model and tokenizer.
 
         Raises:
             ValueError: If the model or tokenizer cannot be loaded from the specified path.
         """
-        full_path = os.path.join(path, self.model_name)
-        self.model = AutoModelForSequenceClassification.from_pretrained(full_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(full_path)
+        self.model = AutoModelForSequenceClassification.from_pretrained(path)
+        self.tokenizer = AutoTokenizer.from_pretrained(path)
         self.pipeline = TextClassificationPipeline(
             model=self.model,
             tokenizer=self.tokenizer,
