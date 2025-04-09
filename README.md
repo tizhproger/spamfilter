@@ -53,6 +53,7 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
   - `distilbert-base-uncased`
   - `bert-base-uncased`
   - `cointegrated/rubert-tiny`
+  - `etc.`
 - You can load your own HuggingFace model via `Detector.custom(...)`
 
 ---
