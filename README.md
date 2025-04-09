@@ -323,6 +323,22 @@ Datasets used for testing:
 
 `But this is true for transformers, simple LR model was affected much higher (accuracy on Email dataset itself is higher that on a combined ones or SMS/Twitter themselves). Reason for that could be a samples amount or a balance. I think it was an amount of samples in first place.`
 
+### Model Ranking Summary
+
+| Model                   |   F1 (Spam) |   Precision (Spam) |   Recall (Spam) |   Time (s) |   FP |   FN |   Score |
+|:------------------------|------------:|-------------------:|----------------:|-----------:|-----:|-----:|--------:|
+| TF-IDF + LR             |       0.942 |              0.936 |           0.948 |      1.048 |   94 |   75 |   1.314 |
+| DistilBERT              |       0.98  |              0.988 |           0.974 |      8.136 |   16 |   35 |   0.443 |
+| RuBERT Tiny             |       0.98  |              0.98  |           0.98  |     11.34  |   28 |   31 |   0.39  |
+| DistilBERT Multilingual |       0.98  |              0.99  |           0.98  |     13.42  |   14 |   40 |   0.367 |
+| BERT Base               |       0.982 |              0.992 |           0.972 |     14.87  |   10 |   38 |   0.355 |
+| RoBERTa Base            |       0.97  |              0.984 |           0.962 |     15.054 |   32 |   53 |   0.349 |
+| BERT Multilingual       |       0.975 |              0.98  |           0.97  |     16.677 |   57 |   82 |   0.339 |
+| DeBERTa v3 Small        |       0.982 |              0.99  |           0.976 |     17.298 |   13 |   33 |   0.338 |
+| XLM-RoBERTa Base        |       0.962 |              0.978 |           0.945 |     17.118 |   64 |  151 |   0.332 |
+
+---
+
 <details>
   <summary>English Datasets</summary>
 
