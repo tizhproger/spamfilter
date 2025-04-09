@@ -10,3 +10,4 @@ images/
 models/
 examples/
 checkpoints/
+tests/
