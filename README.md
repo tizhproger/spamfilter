@@ -5,7 +5,7 @@
 ## Functionality
 
 - Text classification into `1` and `0` as `spam` and `not spam` respectively
-- Support for different models: TF-IDF + Logistic Regression (out of the box), BERT based models, any HugginFace model. (Included pretrained models: TF-IDF + Logistic Regression, BERT Base, DistilBERT, RuBERT)
+- Support for different models: TF-IDF + Logistic Regression (out of the box), BERT based models, any HugginFace model. `(Included pretrained models: TF-IDF + Logistic Regression, BERT Base, DistilBERT, RuBERT)`
 - Training, evaluating and benchmarking of models out of the box
 - Supports training on user data
 - Prediction, probabilities, evaluation, saving/loading
