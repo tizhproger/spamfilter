@@ -318,7 +318,10 @@ Datasets used for testing:
 
 `I can also assume, that F1 score of BERT models was affected by classes imbalance.`\
 `However, I had two datasets with different distributions: Telegram (RU) - almost 50/50 balance, SMS (EN) - 80/20 or a bit different.`\
-`As test showed, accuracy remained high, F1 score was (just by view) a bit better on imbalanced EN datasets, on one and the same model ¯⁠\⁠_⁠(⁠ツ⁠)⁠_⁠/⁠¯`\
+`As test showed, accuracy remained high, F1 score was (just by view) a bit better on imbalanced EN datasets, on one and the same model ¯⁠\⁠_⁠(⁠ツ⁠)⁠_⁠/⁠¯`
+
+<br/>
+
 `But this is true for transformers, simple LR model was affected much higher (accuracy on Email dataset itself is higher that on a combined ones or SMS/Twitter themselves). Reason for that could be a samples amount or a balance. I think it was an amount of samples in first place.`\
 
 <details>
