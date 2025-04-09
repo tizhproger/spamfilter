@@ -100,14 +100,13 @@ class Detector:
 
         return name == "tfidf" or Detector.is_valid_hf_model(os.path.join("models", name))
 
-    def train(self, texts, labels, output_dir="model_output", logging_dir=None, eval_texts=None, eval_labels=None, **kwargs):
+    def train(self, texts, labels, logging_dir=None, eval_texts=None, eval_labels=None, **kwargs):
         """
         Trains the model on given texts and labels.
 
         Args:
             texts (list): A list of texts to train.
             labels (list): A list of labels for given texts.
-            output_dir (str): The directory to save the model to. Defaults to "model_output".
             logging_dir (str): The directory to save training logs to. Defaults to "/logs".
             eval_texts (list): A list of texts to evaluate on.
             eval_labels (list): A list of labels for given texts to evaluate on.
@@ -115,7 +114,7 @@ class Detector:
         """
         free_gpu()
         diagnostic_report(texts, labels)
-        self.detector.train(texts, labels, output_dir=output_dir, logging_dir=logging_dir or "/logs", eval_texts=eval_texts, eval_labels=eval_labels, **kwargs)
+        self.detector.train(texts, labels, logging_dir=logging_dir or "/logs", eval_texts=eval_texts, eval_labels=eval_labels, **kwargs)
 
     def evaluate(self, texts, labels):
         """
@@ -319,14 +318,13 @@ class BertLikeDetector:
         if self.max_len > 1e5:
             self.max_len = 512
 
-    def train(self, texts, labels, output_dir="bert_model", logging_dir="/logs", epochs=3, batch_size=8, eval_texts=None, eval_labels=None):
+    def train(self, texts, labels, logging_dir="/logs", epochs=3, batch_size=8, eval_texts=None, eval_labels=None):
         """
         Trains the model on given texts and labels.
 
         Args:
             texts (list): A list of texts to train.
             labels (list): A list of labels for given texts.
-            output_dir (str): The directory to save the model to. Defaults to "bert_model".
             logging_dir (str): The directory to save training logs to. Defaults to "/logs".
             epochs (int): The number of epochs to train. Defaults to 3.
             batch_size (int): The batch size to use for training. Defaults to 8 if GPU is available, otherwise 4.
@@ -353,7 +351,6 @@ class BertLikeDetector:
             eval_dataset = eval_data.map(tokenize, batched=True)
 
         args = TrainingArguments(
-            output_dir=output_dir,
             eval_strategy="epoch" if eval_dataset is not None else "no",
             per_device_train_batch_size=batch_size if batch_size else self.batch_size,
             per_device_eval_batch_size=batch_size if batch_size else self.batch_size,
