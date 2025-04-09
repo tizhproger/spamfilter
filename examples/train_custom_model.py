@@ -7,6 +7,6 @@ texts, labels = df["text"].tolist(), df["label"].tolist()
 model_name = "cointegrated/rubert-tiny2"
 save_as = "rubert_custom"
 
-detector = Detector.custom(model_name, save_as)
+detector = Detector.custom(model_name, "models")
 detector.train(texts, labels)
-detector.save(f"models/{save_as}")
+detector.save(save_as)
