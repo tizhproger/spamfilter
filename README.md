@@ -442,6 +442,9 @@ HOWEVER, it is still a valuable data and I couldn't throw it away.
 
 <br/>
 
+<details>
+  <summary>Graphs</summary>
+
 The first picture show the distribution of F1 score across datasets.
 
 ![](images/f1_score.png)
@@ -456,7 +459,45 @@ This graph visually shows how differently models handled datasets.
 
 Here we add a time value into consideration.
 
-![](images/combined_ranking.png)
+![](images/model_ranking.png)
+
+<br/>
+
+Average time per dataset.
+
+![](images/avg_inference_dataset.png)
+
+<br/>
+
+Average precision per dataset.
+
+![](images/avg_precision_dataset.png)
+
+<br/>
+
+Average recall per dataset.
+
+![](images/avg_recall_dataset.png)
+
+<br/>
+
+Average time per model.
+
+![](images/avg_inference_model.png)
+
+<br/>
+
+Comparison of total FP/FN values per model.
+
+![](images/fp_fn_model.png)
+
+<br/>
+
+Ranking models by F1 and Time.
+
+![](images/model_ranking.png)
+
+</details>
 
 
 ## Findings
