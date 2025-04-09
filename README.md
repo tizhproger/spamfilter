@@ -46,12 +46,11 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 
 ### Supported Models
 
-- `TF-IDF + LogisticRegression` (lightweight baseline)
-- Pretrained HuggingFace models:
+- `TF-IDF + LogisticRegression` (lightweight baseline) `(Trained on Combined NoEmail dataset)`
+- Pretrained HuggingFace models `(Combined NoEmail dataset)`:
   - `distilbert-base-uncased`
   - `bert-base-uncased`
   - `cointegrated/rubert-tiny`
-  - etc.
 - You can load your own HuggingFace model via `Detector.custom(...)`
 
 ---
