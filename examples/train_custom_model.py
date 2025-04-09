@@ -3,10 +3,11 @@ import pandas as pd
 
 df = pd.read_csv("your_dataset.csv")  # must contain columns: text (message), label (spam or not)
 texts, labels = df["text"].tolist(), df["label"].tolist()
+X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
 
 model_name = "cointegrated/rubert-tiny2"
 save_as = "rubert_custom"
 
 detector = Detector.custom(model_name, "models")
-detector.train(texts, labels)
+detector.train(X_train, y_train, eval_texts = X_test, eval_labels = y_test)
 detector.save(save_as)
