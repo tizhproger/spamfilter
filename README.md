@@ -11,7 +11,7 @@
 - Prediction, probabilities, evaluation, saving/loading
 - Supports CUDA (if available) for processing
 
-All datasets used for training the prepaired models, are listed in folder "datasets". In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
+All datasets used for training the prepaired models, are listed in folder `datasets`. In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
 
 
 ## Installation
