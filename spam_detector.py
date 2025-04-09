@@ -168,10 +168,9 @@ class Detector:
         Loads the model from the specified directory.
 
         Args:
-            path (str): The directory from which to load the model. Defaults to "models/".
+            path (str): The directory from which to load the model.
         """
-        model_path = os.path.join(path, self.model_name)
-        self.detector.load(model_path)
+        self.detector.load(path)
 
     def get_name(self):
         """
