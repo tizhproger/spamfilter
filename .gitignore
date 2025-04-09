@@ -7,4 +7,6 @@ __pycache__/
 datasets/
 tests/
 images/
+models/
+examples/
 checkpoints/
