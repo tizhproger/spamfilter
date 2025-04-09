@@ -2,16 +2,18 @@
 
 **SpamFilter** — is a modular Python toolkit for building, training, and evaluating spam classifiers using traditional (TF-IDF + LogisticRegression) and transformer-based (BERT, RoBERTa, etc.) models. It includes built-in benchmarking, diagnostics, and utilities.
 
+`Finetuned models can be downloaded here:` [GoogleDrive](https://drive.google.com/drive/folders/1UMiMbDp7ybUZFK5bx3rx_-F1x0w353Xw?usp=sharing)
+
 ## Functionality
 
 - Text classification into `1` and `0` as `spam` and `not spam` respectively
-- Support for different models: TF-IDF + Logistic Regression (out of the box), BERT based models, any HugginFace model. `(Included pretrained models: TF-IDF + Logistic Regression, BERT Base, DistilBERT, RuBERT)`
+- Support for different models: TF-IDF + Logistic Regression (out of the box), BERT based models, any HugginFace model. `(Included finetuned models: TF-IDF + Logistic Regression, BERT Base, DistilBERT, RuBERT)`
 - Training, evaluating and benchmarking of models out of the box
-- Supports training on user data
+- Supports finetuning on user data
 - Prediction, probabilities, evaluation, saving/loading
 - Supports CUDA (if available) for processing
 
-All datasets used for training the prepaired models, are listed in folder `datasets`. In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
+All datasets used for finetuning the prepaired models, are listed in folder `datasets`. In the sections below you will find brief descriptions of them, as well as their preparation code and comparison of models.
 
 
 ## Installation
@@ -46,8 +48,8 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 
 ### Supported Models
 
-- `TF-IDF + LogisticRegression` (lightweight baseline) `(Pretrained on Combined NoEmail dataset)`
-- Pretrained HuggingFace models `(Combined NoEmail dataset)`:
+- `TF-IDF + LogisticRegression` (lightweight baseline) `(Finetuned on Combined NoEmail dataset)`
+- Finetuned HuggingFace models `(Combined NoEmail dataset)`:
   - `distilbert-base-uncased`
   - `bert-base-uncased`
   - `cointegrated/rubert-tiny`
@@ -61,7 +63,7 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 from spam_detector import Detector
 
 clf = Detector("tfidf")  # Fast traditional model
-clf = Detector("distilbert")  # Pretrained transformer, which must be saved in "models" folder
+clf = Detector("distilbert")  # Finetuned transformer, which must be saved in "models" folder
 
 # Load a custom model from HuggingFace
 clf = Detector.custom("cointegrated/rubert-tiny", save_as="rubert_tiny")
@@ -72,7 +74,7 @@ clf = Detector.custom("cointegrated/rubert-tiny", save_as="rubert_tiny")
 ### Training a Model
 
 ```python
-clf.train(texts, labels)  # Simple training
+clf.train(texts, labels)  # Simple finetuning
 
 # With validation
 clf.train(
@@ -178,7 +180,7 @@ predictions = clf.predict_batch(X_test[:10])
   
 Initial set of datasets consists of:
 - **SMS** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset).
-- `Processed dataset used for training is: processed_sms.csv`
+- `Processed dataset used for finetuning is: processed_sms.csv`
 
 Example of content:
 ![Dataset Content](images/sms_dataset_content.png)
@@ -188,7 +190,7 @@ Example of content:
 <br/>
 
 - **Twitter** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/greyhatboy/twitter-spam-dataset)
-- `Processed dataset used for training is: processed_twitter.csv`
+- `Processed dataset used for finetuning is: processed_twitter.csv`
 
 Example of content:
 ![Dataset Content](images/twitter_ds_content.png)
@@ -198,7 +200,7 @@ Example of content:
 <br/>
 
 - **Email** dataset. Available on: [Kaggle](https://www.kaggle.com/datasets/jackksoncsie/spam-email-dataset)
-- `Processed dataset used for training is: processed_email.csv`
+- `Processed dataset used for finetuning is: processed_email.csv`
 
 Example of content:
 ![Dataset Content](images/email_ds_content.png)
