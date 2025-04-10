@@ -49,11 +49,11 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 ### Supported Models
 
 - `TF-IDF + LogisticRegression` (lightweight baseline) `(Finetuned on Combined NoEmail dataset)`
-- Finetuned HuggingFace models `(Combined NoEmail dataset)`:
-  - `distilbert-base-uncased`
-  - `bert-base-uncased`
-  - `cointegrated/rubert-tiny`
-  - `etc.`
+- Finetuned HuggingFace models:
+  - `distilbert-base-uncased` - `(Combined NoEmail dataset)`
+  - `bert-base-uncased` - `(Combined NoEmail dataset)`
+  - `cointegrated/rubert-tiny` - `(Telegram RU)`
+  - `distilbert-base-multilingual-cased` - `(Telegram RU)`
 - You can load your own HuggingFace model via `Detector.custom(...)`
 
 ---
@@ -67,7 +67,7 @@ clf = Detector("tfidf")  # Fast traditional model
 clf = Detector("distilbert")  # Finetuned transformer, which must be saved in "models" folder
 
 # Load a custom model from HuggingFace
-clf = Detector.custom("cointegrated/rubert-tiny", save_as="rubert_tiny")
+clf = Detector.custom("cointegrated/rubert-tiny")
 ```
 
 ---
@@ -125,10 +125,10 @@ The `return_proba=True` flag works for all model types (TF-IDF or Transformers).
 ### Saving and Loading Models
 
 ```python
-clf.save("models/")  # Saves to models
-clf.load("models/")  # Loads from the folder
+clf.save("models/<model_name>")  # Saves to specified folder
+clf.load("models/<model_name>")  # Loads from the specified folder
 ```
-You can call it without parameters, in that case models will be loaded/saved from/to default `models` folder.
+You can choose any folder you want, nwhere to save a model.
 
 ---
 
