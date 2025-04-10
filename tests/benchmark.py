@@ -23,7 +23,7 @@ def evaluate_model(model_name, path_name, texts, labels, dataset_name, save=True
     X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
 
     detector = Detector.custom(model_name)
-    detector.train(X_train, y_train, eval_texts=X_test, eval_labels=y_test, output_dir=model_path)
+    detector.train(X_train, y_train, eval_texts=X_test, eval_labels=y_test)
     if save:
         detector.save(model_path)
 
