@@ -64,11 +64,20 @@ class Detector:
         return all(os.path.isfile(os.path.join(path, f)) for f in required_files)
     
     @staticmethod
-    def list_models() -> list:
-        """Lists all available models. Returns a list of strings, where each string is
-        the name of a model. The list includes "tfidf" if the TF-IDF model is available.
+    def list_models(models_dir=None) -> list:
+        """Lists all valid models in the specified directory.
+
+        Args:
+            models_dir (str): The directory to list models from. Defaults to "models".
+
+        Returns:
+            list: A list of valid model names.
         """
-        base_dir = "models"
+        if models_dir is not None:
+            base_dir = models_dir
+        else:
+            base_dir = "models"
+
         if not os.path.isdir(base_dir):
             return []
         return [
@@ -78,7 +87,7 @@ class Detector:
         ]
     
     @staticmethod
-    def is_model_available(name) -> bool:
+    def is_model_available(name, models_dir=None) -> bool:
         """
         Checks if a model with the given name is available.
 
@@ -88,8 +97,14 @@ class Detector:
         Returns:
             bool: True if the model is available, False otherwise.
         """
+        if models_dir is not None:
+            base_dir = models_dir
+        else:
+            base_dir = "models"
 
-        return name == "tfidf" or Detector.is_valid_hf_model(os.path.join("models", name))
+        if not os.path.isdir(base_dir):
+            return False
+        return name == "tfidf" or Detector.is_valid_hf_model(os.path.join(base_dir, name))
 
     def train(self, texts, labels, logging_dir=None, eval_texts=None, eval_labels=None, **kwargs) -> None:
         """
