@@ -4,7 +4,11 @@ from spam_detector import Detector
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 
-def evaluate_model(model_name, path_name, texts, labels, dataset_name, save=True):
+# Be aware, thatyour dataset for benchmark should have two columns: 'message' and 'label', if you want to use this code as it is.
+# You can change it according to your need on line 62; namely:
+# Here: texts, labels = df["message"].tolist(), df["label"].tolist()
+
+def evaluate_model(full_model_name, path_name, texts, labels, dataset_name, save=True):
     model_path = f"models/{path_name}"
 
     model_names = {
@@ -22,14 +26,14 @@ def evaluate_model(model_name, path_name, texts, labels, dataset_name, save=True
     print(f"🔧 Training new model: {model_names[path_name]}")
     X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
 
-    detector = Detector.custom(model_name)
+    detector = Detector(full_model_name, load_if_exists=False)
     detector.train(X_train, y_train, eval_texts=X_test, eval_labels=y_test)
     if save:
         detector.save(model_path)
 
-    # Предсказание
+    # Prediction time
     start = time.time()
-    preds = detector.predict_batch(X_test)
+    preds = detector.predict(X_test)
     duration = time.time() - start
 
     acc = accuracy_score(y_test, preds)
@@ -61,8 +65,8 @@ def benchmark_all(datasets, models):
         df = pd.read_csv(dataset_path)
         texts, labels = df["message"].tolist(), df["label"].tolist()
 
-        for path_name, model_name in models.items():
-            result = evaluate_model(model_name, path_name, texts, labels, dataset_name, save=False)
+        for path_name, full_model_name in models.items():
+            result = evaluate_model(full_model_name, path_name, texts, labels, dataset_name, save=False)
             results.append(result)
 
     return pd.DataFrame(results)
