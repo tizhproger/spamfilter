@@ -54,7 +54,7 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
   - `bert-base-uncased` - `(Combined NoEmail dataset)`
   - `cointegrated/rubert-tiny` - `(Telegram RU)`
   - `distilbert-base-multilingual-cased` - `(Telegram RU)`
-- You can load your own HuggingFace model via `Detector.custom(...)`
+- You can load your own HuggingFace model via `Detector(<your_model>, load_if_exists=False)`
 
 ---
 
@@ -63,11 +63,14 @@ pip install torch transformers scikit-learn pandas datasets matplotlib seaborn
 ```python
 from spam_detector import Detector
 
-clf = Detector("tfidf")  # Fast traditional model
-clf = Detector("distilbert")  # Finetuned transformer, which must be saved in "models" folder
+clf = Detector("tfidf")  # Fast traditional model, will try to load saved tfidf model from 'models' folder, by default
+clf = Detector("distilbert")  # Finetuned transformer, which must be saved in "models" folder, by default
+
+# You can set your own path, to do this use
+clf = Detector("distilbert", models_dir="<your_folder>") # It will try to find model in specified folder 
 
 # Load a custom model from HuggingFace
-clf = Detector.custom("cointegrated/rubert-tiny")
+clf = Detector("cointegrated/rubert-tiny", load_if_exists=False)
 ```
 
 ---
@@ -75,13 +78,16 @@ clf = Detector.custom("cointegrated/rubert-tiny")
 ### Training a Model
 
 ```python
-clf.train(texts, labels)  # Simple finetuning
+# Be aware to split your data manually, library does't make it internally
+X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
+
+clf.train(X_train, y_train)  # Simple finetuning
 
 # With validation
 clf.train(
     texts, labels,
-    eval_texts=X_val,
-    eval_labels=y_val
+    eval_texts=X_test,
+    eval_labels=y_test
 )
 ```
 
@@ -100,8 +106,11 @@ Outputs accuracy, confusion matrix, precision/recall/F1 scores.
 ### Inference
 
 ```python
+# Library supports one element prediction
 clf.predict("Congratulations, you won!")
-clf.predict_batch(["Hello!", "Win a free iPhone now!"])
+
+# And batch prediction as well
+clf.predict(["Hello!", "Win a free iPhone now!"])
 ```
 
 ---
@@ -114,7 +123,7 @@ You can return both the predicted label and the confidence score:
 clf.predict("Win a free prize!", return_proba=True)
 # {'label': 1, 'score': 0.987}
 
-clf.predict_batch(["Hi", "Limited offer!"], return_proba=True)
+clf.predict(["Hi", "Limited offer!"], return_proba=True)
 # [{'label': 0, 'score': 0.993}, {'label': 1, 'score': 0.978}]
 ```
 
@@ -128,7 +137,7 @@ The `return_proba=True` flag works for all model types (TF-IDF or Transformers).
 clf.save("models/<model_name>")  # Saves to specified folder
 clf.load("models/<model_name>")  # Loads from the specified folder
 ```
-You can choose any folder you want, nwhere to save a model.
+You can choose any folder you want, where to save a model.
 
 ---
 
@@ -136,6 +145,9 @@ You can choose any folder you want, nwhere to save a model.
 
 ```python
 clf.benchmark(texts)  # Measures prediction time in seconds
+
+# Output:
+# "Time for 10 predictions: 2.5 sec"
 ```
 
 ---
@@ -146,7 +158,32 @@ clf.benchmark(texts)  # Measures prediction time in seconds
 from utils import diagnostic_report, free_gpu
 
 diagnostic_report(texts, labels)  # Shows sample size, label counts, avg length, memory usage etc.
-free_gpu()  # Clears CUDA memory
+
+# Can also be used without parameters, in that case displays batch and gpu info
+diagnostic_report()
+
+# Output
+# "📋 === DIAGNOSTICS ==="
+# "🧾 Samples in dataset: 1066"
+# "📏 Average text length (words): 16.1"
+# "🏷 Labels: ("spam", "ham")"
+# "⚙️ batch_size: 16"
+# "🖥 GPU: RTX 3060"
+# "🚦 Memory used: 1200 MB"
+# "📦 Reserved memory: 1500 MB"
+# "🧠 RAM available: 9000 MB / Total: 12000 MB"
+# "✅ Diagnostics finished."
+
+# Cache cleared automatically with torch.cuda.empty_cache() in Detector, but you can call it manually if you need
+free_gpu()
+
+# To show gpu info use (CUDA, GPU name, Memory)
+gpu_info()
+
+# Output
+# "🖥 GPU: RTX 3060"
+# "🚦 Memory used: 1200 MB"
+# "📦 Reserved memory: 1500 MB"
 ```
 
 ---
@@ -154,8 +191,8 @@ free_gpu()  # Clears CUDA memory
 ### Model Management
 
 ```python
-Detector.list_models()  # List available models in /models
-Detector.is_model_available("rubert")  # Check if model exists in "models" folder
+Detector.list_models(<your_folder_path>)  # List available models in your folder or default "models"
+Detector.is_model_available("rubert", models_dir=<your_folder_path>)  # Check if model exists in your folder or "models" folder (by default)
 ```
 
 ---
@@ -163,12 +200,13 @@ Detector.is_model_available("rubert")  # Check if model exists in "models" folde
 ## Example (full cycle)
 
 ```python
-clf = Detector("xlm-roberta")
+clf = Detector("xlm-roberta", load_if_exists=False)
 
+X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
 clf.train(X_train, y_train, eval_texts=X_test, eval_labels=y_test)
 
 clf.evaluate(X_test, y_test)
-predictions = clf.predict_batch(X_test[:10])
+predictions = clf.predict(X_test[:10])
 ```
 
 ---
