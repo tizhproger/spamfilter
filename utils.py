@@ -18,15 +18,18 @@ def gpu_info():
     print(f"🚦 Memory used: {torch.cuda.memory_allocated() / 1024**2:.2f} MB")
     print(f"📦 Reserved memory: {torch.cuda.memory_reserved() / 1024**2:.2f} MB")
 
-def diagnostic_report(texts, labels=None, batch_size=None):
+def diagnostic_report(texts=None, labels=None, batch_size=None):
     print("")
     print("📋 === DIAGNOSTICS ===")
     print(f"🧾 Samples in dataset: {len(texts)}")
+    if texts:
+        print(f"🧾 Samples in dataset: {len(texts)}")
+        
+        avg_len = sum(len(t.split()) for t in texts) / len(texts)
+        print(f"📏 Average text length (words): {avg_len:.1f}")
+        
     if labels:
         print(f"🏷 Labels: {set(labels)}")
-
-    avg_len = sum(len(t.split()) for t in texts) / len(texts)
-    print(f"📏 Average text length (words): {avg_len:.1f}")
 
     bs = batch_size or (16 if torch.cuda.is_available() else 4)
     print(f"⚙️ batch_size: {bs}")
